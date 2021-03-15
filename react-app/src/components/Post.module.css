@@ -1,0 +1,80 @@
+.container{
+    margin-top: 60px;
+    font-family: Arial, sans-serif;
+}
+.profile{
+    border-radius: 200px;
+    object-fit: cover;
+    max-width: 30px;;
+}
+.username{
+    padding-left: 10px;
+    display: inline-block;
+    font-size: 15px;
+}
+.action{
+    padding-left: 13px;
+    padding-top: 3px;
+}
+.comment{
+    padding-left: 10px;
+    display: inline-block;
+}
+.user{
+    display: flex;
+    align-items: center;
+    padding-left: 18px;
+}
+.post{
+    padding-left: 10px;
+    padding-top: 18px;
+
+}
+.photo{
+    width: 350px;
+    height: 360px;
+    object-fit: cover;
+}
+.caption{
+    padding-top: 10px;
+    padding-left: 10px;
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+}
+.likes{
+    padding-top: 6px;
+    padding-left: 10px;
+    
+}
+.date{
+    padding-left: 18px;
+    padding-top: 12px;
+    text-transform: uppercase;
+    font-size: 11px;
+    color: lightgray;
+}
+.commentsection{
+    font-family: Arial, sans-serif;
+    font-size: 15px;
+    padding-left: 20px;
+    padding-top: 7px;
+}
+@media screen and (max-width: 600px) {
+    .post{
+        padding-top: 17px;
+        padding-left: 0px;
+        padding-right: 0px;
+        
+    }
+    .photo{
+        width: 360px;
+        height: 370px;
+        object-fit: cover;
+    }
+    .commentsection{
+        padding-left: 10px;
+    }
+    .date{
+        padding-left: 10px;
+    }
+}
