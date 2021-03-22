@@ -9,38 +9,79 @@ import Explore from './Explore.js';
 import NewPost from './NewPost.js';
 import Activity from './Activity.js';
 import Profile from './Profile.js';
+import initialStore from './utils/initialStore';
+import { useState } from 'react';
+//npm start, npm run deploy
 
-class App extends React.Component {
-  constructor(props){
-    super(props);
-    this.state = {
-      page: "home"
-    }
-    this.setPage=this.setPage.bind(this);
+function App() {
+
+    const [page, setPage] = useState('home');
+    const [store, setStore] = useState(initialStore);
+
+  function addLike(postId){
+    const like = {
+        userId: store.currentUserId, 
+        postId, // make sure you understand this shorthand syntax
+        datetime: new Date().toISOString()
+    };
+    
+    setStore({
+        store:{
+          ...store,// spread props. make sure you understand this
+          likes: store.likes.concat(like)
+        }
+    });
   }
-  setPage(page){
-    this.setState({ page: page});
+
+  function removeLike(postId){
+    // use filter and currentUserId to remove the like from the likes array
+    setStore(state=>({
+      store:{
+        ...store,
+        likes: store.likes.filter(like=>!(like.userId===state.store.currentUserId && like.postId===postId))
+      }
+  }));
   }
-  renderMain(page){
+
+  function addComment(postId, text){
+    const comment = {
+      userId: store.currentUserId, 
+      postId,
+      text,
+      datetime: new Date().toISOString()
+    };
+    setStore({
+      ...store,
+        comments:store.comments.concat(comment)
+    });
+  }
+
+  function renderMain(page){
     switch(page){
-    case "home": return <Home/>;
+    case "home": return <Home 
+    store={store}
+    onLike={addLike} 
+    onUnlike={removeLike}
+    onComment={addComment}  />
     case "explore": return <Explore/>;
     case "newpost": return <NewPost/>;
     case "activity": return <Activity/>;
-    case "profile": return <Profile/>;
+    case "profile": return <Profile
+    store={store}
+    />
     default: return <Home/>;
     }
   }
-  render(){
+  
   return (
     <div className={css.container}>
       <Header/>
       <main className={css.content}>
-        {this.renderMain(this.state.page)} 
+        {renderMain(page)} 
       </main>
-      <Navbar onNavChange={this.setPage}/>
+      <Navbar onNavChange={setPage}/>
     </div>);
-  }
+  
 }
 
 export default App;

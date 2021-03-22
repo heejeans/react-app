@@ -1,0 +1,44 @@
+.container{
+    margin-top: 60px;
+    font-family: Arial, sans-serif;
+    margin-bottom: 50px;
+}
+.pfp{
+    border-radius: 200px;
+    object-fit: cover;
+    max-width: 150px;
+}
+.row{
+    display: flex;
+}
+.col {flex-basis: 33%;}
+
+
+.username{
+    font-size: 35px;
+    margin-left: 20px;
+    display: inline-block;
+}
+.header{
+    margin-left: 30px;
+    display: flex;
+}
+.bio{
+    margin-left: 30px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #dbdbdb;
+}
+.stats{
+    display: flex;
+    max-width: 100%;
+}
+.statss{
+    display: flex;
+    max-width: 100%;
+    color:rgb(190, 189, 189);
+}
+.posts{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-gap: 5px;
+}
