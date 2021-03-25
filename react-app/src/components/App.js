@@ -1,6 +1,6 @@
 //import logo from './logo.svg';
 import './App.css';
-import React from 'react';
+import React, { useState } from 'react';
 import css from './App.module.css';
 import Navbar from './Navbar.js';
 import Header from './Header.js';
@@ -10,7 +10,7 @@ import NewPost from './NewPost.js';
 import Activity from './Activity.js';
 import Profile from './Profile.js';
 import initialStore from './utils/initialStore';
-import { useState } from 'react';
+import uniqueId from './utils/uniqueId';
 //npm start, npm run deploy
 
 function App() {
@@ -56,6 +56,24 @@ function App() {
     });
   }
 
+  function addPost(photo, desc){
+    const post = {
+      id: uniqueId("post"),
+      userId: store.currentUserId,
+      photo,
+      desc,
+      datetime: new Date().toISOString()
+    };
+    setStore({
+      ...store,
+      posts: store.posts.concat(post)
+    });
+    setPage("home");
+  }
+  function cancelPost(){
+    setPage("home");
+  }
+
   function renderMain(page){
     switch(page){
     case "home": return <Home 
@@ -64,12 +82,16 @@ function App() {
     onUnlike={removeLike}
     onComment={addComment}  />
     case "explore": return <Explore/>;
-    case "newpost": return <NewPost/>;
+    case "newpost": return <NewPost
+    store={store}
+    onPost={addPost}
+    onPostCancel={cancelPost}
+    />;
     case "activity": return <Activity/>;
     case "profile": return <Profile
     store={store}
     />
-    default: return <Home/>;
+    default: return <Home store={store} />;
     }
   }
   

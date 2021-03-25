@@ -34,11 +34,16 @@ function NewPost(props) {
     setDragging(false);    
   }
   function handleDescChange(e){
-		setDesc(e)// **// TODO: call setDesc**
+		setDesc(e.target.desc)// **// TODO: call setDesc**
   }
   function handleSubmit(e){
     e.preventDefault();
-
+    if (photo===null){
+      setError("You need to add a photo!");
+      return;
+    }
+    props.onPost(photo, desc);
+    setError('');
 		// **// TODO:
 		// 1. Prevent default behavior
 		// 2. Show error msg if failed and exit
@@ -46,7 +51,7 @@ function NewPost(props) {
 		// 3. Clear error msg**
   }
   function handleCancel(){
-    // **// TODO: Notify the parent about the cancellation**
+    props.onPostCancel();
   }
   return (
     <div>
@@ -65,13 +70,10 @@ function NewPost(props) {
           
         </div>
         <div className={css.desc} >
-					{<textarea className={css.desc} onChange={handleDescChange}>
-                <input type="text" placeholder="Add a description..." value={desc} onChange={e=>
-            setDesc(e.target.value)}/>
-            </textarea>}
+					<textarea placeholder="Add a description..." rows="2" value={desc} onChange={handleDescChange}/>
         </div>
         <div className={css.error}>
-					{/* {!error? 'Error'/* **TODO: show error message** */} */}
+					{error} 
         </div>
         <div className={css.actions}>
           <button onClick={handleCancel}>Cancel</button>
