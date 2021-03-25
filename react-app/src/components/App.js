@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import initialStore from "utils/initialStore";
+import initialStore from "./utils/initialStore";
 import "./App.css";
 import css from "./App.module.css";
 import Header from "./Header.js";
@@ -9,7 +9,7 @@ import NewPost from "./NewPost.js";
 import Activity from "./Activity.js";
 import Profile from "./Profile.js";
 import Navbar from "./Navbar.js";
-import uniqueId from "utils/uniqueId.js";
+import uniqueId from "./utils/uniqueId.js";
 
 function App() {
   const [page, setPage] = useState("home");
