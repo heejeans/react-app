@@ -2,18 +2,14 @@ import React, { useState } from 'react';
 import css from './Post.module.css';
 import publicUrl from './utils/publicUrl.js';
 import timespan from './utils/timespan.js';
+import {
+    Link
+  } from "react-router-dom";
 
 function Post(props){
-    // function renderLike(self){
-    //     if (!self){
-    //         return (<img src={publicUrl('/assets/assets/like.svg')} alt="Like"/>)
-    //     }
-    //     else{
-    //         return(<img src={publicUrl('/assets/assets/unlike.svg')} alt="Unlike"/>)
-    //     }
-    // }
     const [comment, setComment] = useState('');
     const [toggleComment, setToggleComment] = useState(false); // hidden initially
+    
     function handleLike(){ 
         props.onLike(props.post.id);
     }
@@ -30,7 +26,9 @@ function Post(props){
         <div className={css.container}>
             <div className={css.user}>
                 <img className={css.profile} src={publicUrl(props.user.photo)} alt="Pfp"/>
-                <div className={css.username}> <b>{props.user.id}</b></div>  
+                <Link to={`profile/${props.user.id}`} key={props.user.id}>
+                    <div className={css.username}> <b>{props.user.id}</b></div>  
+                </Link>
             </div>
             <div className={css.post}>
                 <img className={css.photo} src={publicUrl(props.post.photo)} id={props.post.id} alt="Pfp"/>

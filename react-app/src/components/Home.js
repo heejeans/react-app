@@ -1,9 +1,12 @@
 import React from "react";
 import Post from "./Post.js";
+import { useParams } from 'react-router-dom';
+
 function Home(props) {
   const { store } = props;
+  let {postId} = useParams(); // the variable name has to match the parameter name
 
-  function fineUser(post) {
+  function findUser(post) {
     return store.users.find(user => user.id === post.userId);
   }
 
@@ -19,14 +22,12 @@ function Home(props) {
     };
   }
 
-  return (
+  return(
     <div>
-      {store.posts
-        .sort((a, b) => new Date(b.datetime) - new Date(a.datetime))
-        .map(post => (
+      {postId ? store.posts.filter(x => x.id === postId).map(post => (
           <Post
             key={post.id}
-            user={fineUser(post, store)}
+            user={findUser(post, store)}
             post={post}
             comments={findComments(post, store)}
             likes={findLikes(post, store)}
@@ -34,9 +35,23 @@ function Home(props) {
             onUnlike={props.onUnlike}
             onComment={props.onComment} 
           />
-        ))}
+    )) :
+      store.posts
+        .sort((a, b) => new Date(b.datetime) - new Date(a.datetime))
+        .map(post => (
+          <Post
+            key={post.id}
+            user={findUser(post, store)}
+            post={post}
+            comments={findComments(post, store)}
+            likes={findLikes(post, store)}
+            onLike={props.onLike}
+            onUnlike={props.onUnlike}
+            onComment={props.onComment} 
+          />
+    ))}  
     </div>
-  );
+    );
 }
 
 export default Home;

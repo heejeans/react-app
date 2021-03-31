@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
 import css from './NewPost.module.css';
 import FileLoader from './FileLoader.js';
+import {
+  useHistory
+} from "react-router-dom";
 
 function NewPost(props) {
+  const history = useHistory();
   const [dragging, setDragging] = useState(false); // to show a dragging effect
   const [desc, setDesc] = useState('');
   const [photo, setPhoto] = useState(null);
@@ -43,6 +47,7 @@ function NewPost(props) {
       return;
     }
     props.onPost(photo, desc);
+    history.goBack();
     setError('');
 		// **// TODO:
 		// 1. Prevent default behavior
@@ -51,11 +56,10 @@ function NewPost(props) {
 		// 3. Clear error msg**
   }
   function handleCancel(){
-    props.onPostCancel();
+    history.push('/');
   }
   return (
     <div>
-        
         <div className={css.photo}>
           {!photo?  <div className={css.message}>Drop your image</div>:
                     <img src={photo} alt="New Post"/>}

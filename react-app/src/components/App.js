@@ -10,9 +10,13 @@ import Activity from "./Activity.js";
 import Profile from "./Profile.js";
 import Navbar from "./Navbar.js";
 import uniqueId from "./utils/uniqueId.js";
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
 
 function App() {
-  const [page, setPage] = useState("home");
   const [store, setStore] = useState(initialStore);
   function addLike(postId) {
     const like = {
@@ -27,7 +31,6 @@ function App() {
     });
   }
   function removeLike(postId) {
-    // console.log('removeLike',postId, store.likes.filter(like=>!(like.userId===store.currentUserId && like.postId===postId)));
     setStore({
       ...store,
       likes: store.likes.filter(
@@ -60,50 +63,61 @@ function App() {
       ...store,
       posts: store.posts.concat(post)
     });
-    
-    setPage("home");
-  }
-  function cancelPost() {
-    // TODO:
-    // 1. Call setPage to come back to the home page (we will use Router to improve this)
-    setPage("home");
-  }
-  function renderMain(page) {
-    switch (page) {
-      case "home":
-        return (
-          <Home
-            store={store}
-            onLike={addLike}
-            onUnlike={removeLike}
-            onComment={addComment}
-          />
-        );
-      case "explore":
-        return <Explore />;
-      case "activity":
-        return <Activity />;
-      case "newpost":
-        return (
-          <NewPost
-            store={store}
-            onPost={addPost}
-            onPostCancel={cancelPost}
-          />
-        );
-      case "profile":
-        return <Profile store={store} />;
-      default:
-        return <Home store={store} />;
-    }
-  }
+}
+function addFollower(userId, followerId){
+	const follower = {
+    userId,
+    followerId,
+  };
+
+  setStore({
+    ...store,
+    followers: store.followers.concat(follower)
+  });
+}
+function removeFollower(userId, followerId){
+	setStore({
+    ...store,
+    followers: store.followers.filter(
+      follower => !(follower.userId === userId && follower.followerId === followerId)
+    )
+  });
+}
 
   return (
-    <div className={css.container}>
-      <Header />
-      <main className={css.content}>{renderMain(page)}</main>
-      <Navbar onNavChange={setPage} />
-    </div>
+    <Router basename={process.env.PUBLIC_URL}>
+      <div className={css.container}>
+        <Header />
+        <main className={css.content}>
+        <Switch>
+          <Route path="/profile/:userId?">
+            <Profile store={store}
+              onFollow={addFollower} 
+              onUnfollow={removeFollower}/>
+          </Route>
+          <Route path="/explore">
+            <Explore/>
+          </Route>
+          <Route path="/activity">
+            <Activity/>
+          </Route>
+          <Route path="/newpost">
+            <NewPost
+              store={store}
+              onPost={addPost}/>
+          </Route>
+          <Route path="/:postId?"> 
+          {/*The question mark (?) is to indicate that the parameter is optional, meaning that the Route will be rendered on both / and /:postId. */}
+            <Home store={store}
+              onLike={addLike}
+              onUnlike={removeLike}
+              onComment={addComment}/>
+          </Route>
+         </Switch>
+        </main>
+        <Navbar/>
+      </div>
+    </Router>
   );
 }
 
