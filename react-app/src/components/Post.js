@@ -49,7 +49,7 @@ function Post(props){
             </div>
             <div className={css.commentsection}>
                 {props.comments.map(comment=>
-                    <div> <Link to={`profile/${props.user.id}`} key={props.user.id}><b>{comment.userId}</b> </Link>{comment.text} </div>
+                    <div> <Link to={`profile/${comment.userId}`} key={comment.userId}><b>{comment.userId}</b> </Link>{comment.text} </div>
                 )}
             </div>
             <div className={css.date}> {timespan(props.post.datetime)} ago</div>

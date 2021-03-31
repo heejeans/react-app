@@ -35,11 +35,15 @@ function Profile(props) {
       return (store.followers.filter(follower=>follower.followerId===store.currentUserId)).length
     }
   }
-  function handleFollow(){ 
-    props.onFollow(userId, store.followers.followerId);
+  function handleFollow(){
+    if (userId){ 
+      props.onFollow(store.followers.userId, store.followers.followerId);
+    }
 }
   function handleUnfollow(){
-    props.onUnfollow(userId, store.followers.followerId);
+    if (userId){ 
+    props.onUnfollow(store.followers.userId, store.followers.followerId);
+    }
 }
   
 return (
