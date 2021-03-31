@@ -76,8 +76,8 @@ return (
     ) :
     store.posts.filter(post=>post.userId===store.currentUserId).map(post=>
       <Link key={post.id} to={post.id}> 
-      <PostThumbnail post={post}/>
-    </Link>
+        <PostThumbnail post={post}/>
+      </Link>
     )
     }
     </div>

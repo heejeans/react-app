@@ -44,11 +44,12 @@ function Post(props){
                     </div>
                 </div>
                 <div className={css.likes}> <b>{props.likes.count} likes</b></div>
-                <div className={css.caption}> <b>{props.post.userId}</b> {props.post.desc} </div>
+                
+                <div className={css.caption}> <Link to={`profile/${props.user.id}`} key={props.user.id}><b>{props.post.userId}</b></Link> {props.post.desc} </div>
             </div>
             <div className={css.commentsection}>
                 {props.comments.map(comment=>
-                    <div> <b>{comment.userId}</b> {comment.text} </div>
+                    <div> <Link to={`profile/${props.user.id}`} key={props.user.id}><b>{comment.userId}</b> </Link>{comment.text} </div>
                 )}
             </div>
             <div className={css.date}> {timespan(props.post.datetime)} ago</div>
