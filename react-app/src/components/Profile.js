@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PostThumbnail from './PostThumbnail.js'
 import publicUrl from './utils/publicUrl.js';
 import css from './Profile.module.css';
@@ -6,84 +6,76 @@ import {
   Link
 } from "react-router-dom";
 import { useParams } from 'react-router-dom';
+import { StoreContext } from 'contexts/StoreContext';
 
 function Profile(props) {
+  let {
+    users, posts, followers, currentUserId, addFollower, removeFollower
+  } = useContext(StoreContext);
   const {store} = props;
   let {userId} = useParams();
-  let user = store.users.find(user=>user.id===userId) || store.users.find(user=>user.id===store.currentUserId);
-  function findPosts(store){
-    if (userId){
-      return (store.posts.filter(post=>post.userId===userId)).length
-    }
-    else{
-      return (store.posts.filter(post=>post.userId===store.currentUserId)).length
-    }
+  userId = userId ? userId : currentUserId;
+  const user = users.find(u => u.id === userId);
+  const postss = posts.filter(p=> p.userId === userId)
+  const followerss = followers.filter(f=> f.userId === userId);
+  const following = followers.filter(f=> f.followerId === userId);
+  function handleFollow() {
+    addFollower(userId, currentUserId);
   }
-  function findFollowers(store){
-    if (userId){
-      return (store.followers.filter(follower=>follower.userId===userId)).length
-    }
-    else{
-      return (store.followers.filter(follower=>follower.userId===store.currentUserId)).length
-    }
+  function handleUnfollow() {
+    removeFollower(userId, currentUserId);
   }
-  function findFollowing(store){
-    if (userId){
-      return (store.followers.filter(follower=>follower.followerId===userId)).length
-    }
-    else {
-      return (store.followers.filter(follower=>follower.followerId===store.currentUserId)).length
-    }
-  }
-  function handleFollow(){
-    if (userId){ 
-      props.onFollow(store.followers.userId, store.followers.followerId);
-    }
-}
-  function handleUnfollow(){
-    if (userId){ 
-    props.onUnfollow(store.followers.userId, store.followers.followerId);
-    }
-}
   
 return (
   <div className={css.container}>
-    <div className={css.header}>
-      <img className={css.pfp} src={publicUrl(user.photo)} alt="Pfp"/>
-      <div className={css.username}>{user.id}</div>
-        <button>
-          {store.followers.filter(x=>x.followerId===store.currentUserId) ?
-            <div className={css.unfollowBtn} onClick={handleUnfollow}>Unfollow</div> :
-            <div className={css.followBtn} onClick={handleFollow}>Follow</div>
-          }
-        </button>
-    </div>
+    <header className={css.header}>
+      <div className={css.photo}>
+        <img src={publicUrl(user.photo)} alt="Profile"/>
+      </div>
+      <div className={css.id}>
+        <span>{user.id}</span>
+        {userId !== currentUserId && (
+            <div>
+              {followerss.some(f => f.followerId === currentUserId) ? (
+                <button className={css.unfollowBtn} onClick={handleUnfollow}>
+                  Unfollow
+                </button>
+              ) : (
+                <button className={css.followBtn} onClick={handleFollow}>
+                  Follow
+                </button>
+              )}
+            </div>
+          )}
+      </div>
+    </header>
     <p className={css.bio}>
       <b>{user.name}</b>
       <br/>{user.bio}
     </p>
-    <div className={css.stats}>
-        <div className={css.col}>{findPosts(store)}</div>
-        <div className={css.col}>{findFollowers(store)}</div>
-        <div className={css.col}>{findFollowing(store)}</div>
-    </div>
-    <div className={css.statss}>
-        <div className={css.col}>posts</div>
-        <div className={css.col}>followers</div>
-        <div className={css.col}>following</div>
-    </div>
+    <ul className={css.activity}>
+        <li>
+          <span>{postss.length}</span>
+          <br />
+          posts
+        </li>
+        <li>
+          <span>{followerss.length}</span>
+          <br />
+          followers
+        </li>
+        <li>
+          <span>{following.length}</span>
+          <br />
+          following
+        </li>
+  </ul>
     <div className={css.posts}>
-      {userId ? store.posts.filter(post=>post.userId===userId).map(post=>
-      <Link key={post.id} to={post.id}> 
-      <PostThumbnail post={post}/>
-    </Link>
-    ) :
-    store.posts.filter(post=>post.userId===store.currentUserId).map(post=>
-      <Link key={post.id} to={post.id}> 
-        <PostThumbnail post={post}/>
-      </Link>
-    )
-    }
+    {postss.map(post => (
+          <Link key={post.id} to={`/${post.id}`}>
+            <PostThumbnail post={post} />
+          </Link>
+        ))}
     </div>
   </div>
 )
