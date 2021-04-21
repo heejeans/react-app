@@ -6,6 +6,8 @@ import {
   useHistory
 } from "react-router-dom";
 import { StoreContext } from 'contexts/StoreContext';
+import { Redirect } from "react-router-dom";
+
 
 function NewPost(props) {
   const history = useHistory();
@@ -15,7 +17,7 @@ function NewPost(props) {
   const [error, setError] = useState(''); // to show an error message
 
   let {
-    addPost
+    addPost, currentUserId
   } = useContext(StoreContext);
 
   function handleFileDragEnter(e){
@@ -65,6 +67,7 @@ function NewPost(props) {
     history.push('/');
   }
   return (
+    !currentUserId?<Redirect to="login"/>:
     <div>
         <div className={css.photo}>
           {!photo?  <div className={css.message}>Drop your image</div>:

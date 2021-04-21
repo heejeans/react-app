@@ -9,6 +9,8 @@ import Activity from "./Activity.js";
 import Profile from "./Profile.js";
 import Navbar from "./Navbar.js";
 import StoreContextProvider from "contexts/StoreContext.js";
+import Login from "./Login/Login.js";
+import Signup from "./Signup/Signup.js";
 import {
   BrowserRouter as Router,
   Switch,
@@ -39,6 +41,12 @@ function App() {
           <Route path="/:postId?"> 
           {/*The question mark (?) is to indicate that the parameter is optional, meaning that the Route will be rendered on both / and /:postId. */}
             <Home/>
+          </Route>
+          <Route path="/login">
+	          <Login />
+          </Route>
+          <Route path="/signup">
+            <Signup />
           </Route>
          </Switch>
         </main>

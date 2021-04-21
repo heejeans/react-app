@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { useParams } from 'react-router-dom';
 import { StoreContext } from 'contexts/StoreContext';
+import { Redirect } from "react-router-dom";
 
 function Profile(props) {
   let {
@@ -27,6 +28,7 @@ function Profile(props) {
   }
   
 return (
+  !user?<Redirect to="login"/>:
   <div className={css.container}>
     <header className={css.header}>
       <div className={css.photo}>
